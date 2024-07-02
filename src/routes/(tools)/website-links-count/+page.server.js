@@ -19,10 +19,11 @@ app.get("/fetch-links", async (req, res) => {
     const $ = cheerio.load(response.data);
     const links = [];
     $("a").each((index, element) => {
-      const link = $(element).attr("href");
-      if (link) {
-        const fullUrl = new URL(link, url).href; // Construct the full URL
-        links.push(fullUrl);
+      const href = $(element).attr("href");
+      const text = $(element).text().trim();
+      if (href) {
+        const fullUrl = new URL(href, url).href; // Construct the full URL
+        links.push({ href: fullUrl, text });
       }
     });
     res.json(links);

@@ -31,24 +31,24 @@
 		{#if error.length > 0}
 			<p style="color: red" class="mt-4">{error}</p>
 		{:else if links.length > 0}
-			<div class="card gap-16 items-center mx-auto max-w-screen-xl overflow-hidden rounded-lg p-8 mt-6">
-				<Table>
+				<Table class="items-center mx-auto max-w-screen-xl mt-8">
 					<TableHead>
 						<TableHeadCell>#</TableHeadCell>
+						<TableHeadCell>Anchor Text</TableHeadCell>
 						<TableHeadCell>Link</TableHeadCell>
 					</TableHead>
 					<TableBody tableBodyClass="divide-y">
-						{#each links as link, index}
+						{#each links as { href, text }, index}
 							<TableBodyRow>
 								<TableBodyCell>{index + 1}</TableBodyCell>
+								<TableBodyCell>{text}</TableBodyCell>
 								<TableBodyCell>
-									<a href={link} target="_blank" rel="noopener noreferrer">{link}</a>
+									<a href={href} target="_blank" rel="noopener noreferrer">{href}</a>
 								</TableBodyCell>
 							</TableBodyRow>
 						{/each}
 					</TableBody>
 				</Table>
-			</div>
 		{/if}
 	</div>
 </div>

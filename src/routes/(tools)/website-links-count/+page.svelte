@@ -31,24 +31,30 @@
 		{#if error.length > 0}
 			<p style="color: red" class="mt-4">{error}</p>
 		{:else if links.length > 0}
-				<Table class="items-center mx-auto max-w-screen-xl mt-8">
+			<div class="card gap-16 items-center mx-auto max-w-screen-xl overflow-hidden rounded-lg mt-8">
+				<Table>
 					<TableHead>
-						<TableHeadCell>#</TableHeadCell>
+						<TableHeadCell class="!p-4">#</TableHeadCell>
+						<TableHeadCell>Link</TableHeadCell>						
 						<TableHeadCell>Anchor Text</TableHeadCell>
-						<TableHeadCell>Link</TableHeadCell>
+						<TableHeadCell>Type</TableHeadCell>
+						<TableHeadCell>Follow</TableHeadCell>
 					</TableHead>
 					<TableBody tableBodyClass="divide-y">
-						{#each links as { href, text }, index}
+						{#each links as { href, text, type, followStatus }, index}
 							<TableBodyRow>
-								<TableBodyCell>{index + 1}</TableBodyCell>
-								<TableBodyCell>{text}</TableBodyCell>
+								<TableBodyCell class="!p-4">{index + 1}</TableBodyCell>
 								<TableBodyCell>
 									<a href={href} target="_blank" rel="noopener noreferrer">{href}</a>
 								</TableBodyCell>
+								<TableBodyCell>{text}</TableBodyCell>
+								<TableBodyCell>{type}</TableBodyCell>
+								<TableBodyCell>{followStatus}</TableBodyCell>
 							</TableBodyRow>
 						{/each}
 					</TableBody>
 				</Table>
+			</div>
 		{/if}
 	</div>
 </div>

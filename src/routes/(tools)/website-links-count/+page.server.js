@@ -20,10 +20,19 @@ app.get("/fetch-links", async (req, res) => {
     const links = [];
     $("a").each((index, element) => {
       const href = $(element).attr("href");
-      const text = $(element).text().trim();
+      let text = $(element).text().trim();
+      const img = $(element).find("img");
+      let type = "Text";
+      if (img.length > 0) {
+        text = img.attr("alt") || "Image";
+        type = "Image";
+      }
+      const rel = $(element).attr("rel");
+      const isNoFollow = rel && rel.includes("nofollow");
+      const followStatus = isNoFollow ? "No Follow" : "Do Follow";
       if (href) {
         const fullUrl = new URL(href, url).href; // Construct the full URL
-        links.push({ href: fullUrl, text });
+        links.push({ href: fullUrl, text, type, followStatus });
       }
     });
     res.json(links);

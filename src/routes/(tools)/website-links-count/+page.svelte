@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Input, ButtonGroup, Label, Button, Hr } from 'flowbite-svelte';
+	import { Input, ButtonGroup, Label, Button, CloseButton } from 'flowbite-svelte';
 	import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
 
 	let url = '';
@@ -18,13 +18,25 @@
 			error = `Error: ${err.message}`;
 		}
 	}
+
+	function clearData() {
+		url = '';
+		links = [];
+		error = '';
+	}
 </script>
 
 <div class="card gap-16 items-center mx-auto max-w-screen-xl overflow-hidden rounded-lg">
 	<div class="p-8">
 		<Label for="input-addon" class="mb-2">Enter URL</Label>
 		<ButtonGroup class="w-full">
-			<Input id="input-addon" type="url" placeholder="https://example.com/" bind:value={url}/>
+			{#if url=="" && links.length==0}
+				<Input id="" type="url" placeholder="https://example.com/" bind:value={url}/>
+			{:else}
+				<Input id="input-addon" type="url" placeholder="https://example.com/" bind:value={url}>
+					<CloseButton slot="right" on:click={clearData} />
+				</Input>
+			{/if}
 			<Button color="primary" on:click={fetchLinks}>Search</Button>
 		</ButtonGroup>
 

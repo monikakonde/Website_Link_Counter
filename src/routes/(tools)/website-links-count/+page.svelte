@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Input, ButtonGroup, Label, Button, CloseButton } from 'flowbite-svelte';
+	import { Input, ButtonGroup, Label, Button, CloseButton, Card } from 'flowbite-svelte';
 	import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
 
 	let url = '';
@@ -48,9 +48,9 @@
 		<Label for="input-addon" class="mb-2">Enter URL</Label>
 		<ButtonGroup class="w-full">
 			{#if url === "" && links.length === 0}
-				<Input id="input-addon" type="url" placeholder="https://example.com/" bind:value={url}/>
+				<Input on:keydown={fetchLinks} id="input-addon" type="url" placeholder="https://example.com/" bind:value={url}/>
 			{:else}
-				<Input id="input-addon" type="url" placeholder="https://example.com/" bind:value={url}>
+				<Input on:keydown={fetchLinks} id="input-addon" type="url" placeholder="https://example.com/" bind:value={url}>
 					<CloseButton slot="right" on:click={clearData} />
 				</Input>
 			{/if}
@@ -59,35 +59,42 @@
 
 		{#if error.length > 0}
 			<p style="color: red" class="mt-4">{error}</p>
-		{:else if links.length > 0}
-			<div class="card w-80 overflow-hidden rounded-lg mt-8">
-				<Table>
-					<TableBody tableBodyClass="divide-y">
-						<TableBodyRow>
-							<TableBodyCell class="font-bold">Total Links:</TableBodyCell>
-							<TableBodyCell class="">{links.length}</TableBodyCell>
-						</TableBodyRow>
-						<TableBodyRow>
-							<TableBodyCell class="font-bold">Do Follow Links:</TableBodyCell>
-							<TableBodyCell class="">{doFollowLinks}</TableBodyCell>
-						</TableBodyRow>
-						<TableBodyRow>
-							<TableBodyCell class="font-bold">No Follow Links:</TableBodyCell>
-							<TableBodyCell class="">{noFollowLinks}</TableBodyCell>
-						</TableBodyRow>
-						<TableBodyRow>
-							<TableBodyCell class="font-bold">Internal Links:</TableBodyCell>
-							<TableBodyCell class="">{internalLinks}</TableBodyCell>
-						</TableBodyRow>
-						<TableBodyRow>
-							<TableBodyCell class="font-bold">External Links:</TableBodyCell>
-							<TableBodyCell class="">{externalLinks}</TableBodyCell>
-						</TableBodyRow>
-					</TableBody>
-				</Table>
-			</div>
+		{:else if links.length >0}
+			<Card class="max-w-full border-2 mt-8">
+				<div class="grid grid-cols-4 border-gray-200 border-b dark:border-gray-700 pb-4">
+					<dl class="col-span-1">
+						<dt class="text-base font-normal text-gray-500 dark:text-gray-400">Links</dt>
+						<dd class="leading-none text-3xl font-bold text-gray-900 dark:text-white">{links.length}</dd>
+					</dl>
+					<dl class="col-span-3">
+						<dt class="text-base font-normal text-gray-500 dark:text-gray-400">URL</dt>
+						<dd class="leading-none text-3xl font-bold text-gray-900 dark:text-white">
+							<a href={url} target="_blank">{url.slice(0,70)}</a>
+						</dd>
+					</dl>
+				</div>
+
+				<div class="grid grid-cols-4 pt-4">
+					<dl>
+						<dt class="text-base font-normal text-gray-500 dark:text-gray-400">Internal</dt>
+						<dd class="leading-none text-xl font-bold text-indigo-500 dark:text-indigo-400">{internalLinks}</dd>
+					</dl>
+					<dl>
+						<dt class="text-base font-normal text-gray-500 dark:text-gray-400">External</dt>
+						<dd class="leading-none text-xl font-bold text-blue-500 dark:text-blue-400">{externalLinks}</dd>
+					</dl>
+					<dl>
+						<dt class="text-base font-normal text-gray-500 dark:text-gray-400">Do Follow</dt>
+						<dd class="leading-none text-xl font-bold text-green-500 dark:text-green-400">{doFollowLinks}</dd>
+					</dl>
+					<dl>
+						<dt class="text-base font-normal text-gray-500 dark:text-gray-400">No Follow</dt>
+						<dd class="leading-none text-xl font-bold text-red-600 dark:text-red-500">{noFollowLinks}</dd>
+					</dl>
+				</div>
+			</Card>
 			
-			<div class="card gap-16 items-center mx-auto max-w-screen-xl rounded-lg mt-8 overflow-hidden">
+			<Card class="max-w-full border-2 mt-8 overflow-hidden" padding="none">
 				<div class="block max-h-[400px] overflow-auto">
 				<Table>
 					<TableHead>
@@ -95,8 +102,8 @@
 						<TableHeadCell>Link</TableHeadCell>						
 						<TableHeadCell>Anchor Text</TableHeadCell>
 						<TableHeadCell>Type</TableHeadCell>
-						<TableHeadCell>Follow</TableHeadCell>
 						<TableHeadCell>Internal</TableHeadCell>
+						<TableHeadCell>Follow</TableHeadCell>
 					</TableHead>
 					<TableBody tableBodyClass="divide-y">
 						{#each links as { href, text, type, followStatus, isInternal }, index}
@@ -107,14 +114,14 @@
 								</TableBodyCell>
 								<TableBodyCell>{text.slice(0, 40)}</TableBodyCell>
 								<TableBodyCell>{type}</TableBodyCell>
-								<TableBodyCell>{followStatus}</TableBodyCell>
 								<TableBodyCell>{isInternal}</TableBodyCell>
+								<TableBodyCell>{followStatus}</TableBodyCell>
 							</TableBodyRow>
 						{/each}
 					</TableBody>
 				</Table>
 				</div>
-			</div>
+			</Card>
 		{/if}
 	</div>
 </div>

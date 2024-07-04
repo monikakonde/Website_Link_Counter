@@ -3,7 +3,7 @@
 	import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
 	import { InfoCircleSolid } from 'flowbite-svelte-icons';
 
-	let url = 'https://kjsit.somaiya.edu.in/en/';
+	let url = '';
 	let links = [];
 	let error = '';
 

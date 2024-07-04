@@ -6,6 +6,7 @@
 	let url = '';
 	let links = [];
 	let error = '';
+	let shortUrl='';
 
 	// Variables to store link statistics
 	let noFollowLinks = 0;
@@ -27,6 +28,7 @@
 			doFollowLinks = links.filter(link => link.followStatus === 'Do follow').length;
 			internalLinks = links.filter(link => link.isInternal === 'Yes').length;
 			externalLinks = links.filter(link => link.isInternal === 'No').length;
+			shortUrl = url.slice(0,31).concat("...");
 		} catch (err) {
 			error = `Error: ${err.message}`;
 		}
@@ -134,7 +136,11 @@
 					<dl class="col-span-2">
 						<dt class="text-base font-normal text-gray-500 dark:text-gray-400">URL</dt>
 						<dd class="leading-none text-3xl font-bold text-gray-900 dark:text-white">
-							<a href={url} target="_blank">{url.slice(0,40)}</a>
+							{#if url.length<35}
+								<a href={url} target="_blank">{url}</a>
+							{:else}
+								<a href={url} target="_blank">{shortUrl}</a>
+							{/if}
 						</dd>
 					</dl>
 					<dl class="col-span-1 pt-1.5 text-right">

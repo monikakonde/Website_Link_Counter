@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { Input, ButtonGroup, Label, Button, CloseButton, Card } from 'flowbite-svelte';
+	import { Input, ButtonGroup, Label, Button, CloseButton, Card, Alert } from 'flowbite-svelte';
 	import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
+	import { InfoCircleSolid } from 'flowbite-svelte-icons';
 
-	let url = '';
+	let url = 'https://kjsit.somaiya.edu.in/en/';
 	let links = [];
 	let error = '';
 
@@ -58,7 +59,10 @@
 		</ButtonGroup>
 
 		{#if error.length > 0}
-			<p style="color: red" class="mt-4">{error}</p>
+			<Alert color="red" class="mt-6">
+				<InfoCircleSolid slot="icon" class="w-5 h-5"/>
+				{error}
+			</Alert>
 		{:else if links.length >0}
 			<Card class="max-w-full border-2 mt-8">
 				<div class="grid grid-cols-4 border-gray-200 border-b dark:border-gray-700 pb-4">

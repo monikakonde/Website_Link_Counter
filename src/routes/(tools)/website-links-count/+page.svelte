@@ -42,6 +42,67 @@
 		internalLinks = 0;
 		externalLinks = 0;
 	}
+
+	function downloadCSV() {
+    // Helper function to convert data to CSV format
+    function convertToCSV(objArray) {
+        const array = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray;
+        let str = '';
+
+        // Add header row
+        const header = Object.keys(array[0]).join(',');
+        str += header + '\r\n';
+
+        // Add data rows
+        for (let i = 0; i < array.length; i++) {
+            let line = '';
+            for (const index in array[i]) {
+                if (line !== '') line += ',';
+                line += array[i][index];
+            }
+            str += line + '\r\n';
+        }
+        return str;
+    }
+
+    // Get data from the tables
+    const linkData = links.map((link, index) => ({
+        '#': index + 1,
+        'Link': link.href,
+        'Anchor Text': link.text,
+        'Type': link.type,
+        'Follow': link.followStatus,
+        'Internal': link.isInternal
+    }));
+
+    const summaryData = [
+        { 'Statistic': 'URL', 'Value': url },
+        { 'Statistic': 'Total Links', 'Value': links.length },
+        { 'Statistic': 'No-Follow Links', 'Value': noFollowLinks },
+        { 'Statistic': 'Do-Follow Links', 'Value': doFollowLinks },
+        { 'Statistic': 'Internal Links', 'Value': internalLinks },
+        { 'Statistic': 'External Links', 'Value': externalLinks }
+    ];
+
+    // Convert data to CSV format
+    const linkCSV = convertToCSV(linkData);
+    const summaryCSV = convertToCSV(summaryData);
+
+    // Create a Blob from the CSV string
+    const blob = new Blob([summaryCSV + '\r\n' + linkCSV], { type: 'text/csv;charset=utf-8;' });
+
+    // Create a link element and trigger the download
+    const link = document.createElement('a');
+    if (link.download !== undefined) {
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'links.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}
 </script>
 
 <div class="card gap-16 items-center mx-auto max-w-screen-xl overflow-hidden rounded-lg">
@@ -70,11 +131,14 @@
 						<dt class="text-base font-normal text-gray-500 dark:text-gray-400">Links</dt>
 						<dd class="leading-none text-3xl font-bold text-gray-900 dark:text-white">{links.length}</dd>
 					</dl>
-					<dl class="col-span-3">
+					<dl class="col-span-2">
 						<dt class="text-base font-normal text-gray-500 dark:text-gray-400">URL</dt>
 						<dd class="leading-none text-3xl font-bold text-gray-900 dark:text-white">
 							<a href={url} target="_blank">{url.slice(0,70)}</a>
 						</dd>
+					</dl>
+					<dl class="col-span-1 pt-1.5">
+						<Button class="" on:click={downloadCSV}>Download Link Stats</Button>
 					</dl>
 				</div>
 

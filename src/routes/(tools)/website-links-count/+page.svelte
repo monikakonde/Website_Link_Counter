@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Input, ButtonGroup, Label, Button, CloseButton, Card, Alert } from 'flowbite-svelte';
 	import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
-	import { InfoCircleSolid } from 'flowbite-svelte-icons';
+	import { InfoCircleSolid, DownloadOutline } from 'flowbite-svelte-icons';
 
 	let url = '';
 	let links = [];
@@ -110,9 +110,9 @@
 		<Label for="input-addon" class="mb-2">Enter URL</Label>
 		<ButtonGroup class="w-full">
 			{#if url === "" && links.length === 0}
-				<Input on:keydown={fetchLinks} id="input-addon" type="url" placeholder="https://example.com/" bind:value={url}/>
+				<Input on:keypress={fetchLinks} id="input-addon" type="url" placeholder="https://example.com/" bind:value={url}/>
 			{:else}
-				<Input on:keydown={fetchLinks} id="input-addon" type="url" placeholder="https://example.com/" bind:value={url}>
+				<Input on:keypress={fetchLinks} id="input-addon" type="url" placeholder="https://example.com/" bind:value={url}>
 					<CloseButton slot="right" on:click={clearData} />
 				</Input>
 			{/if}
@@ -134,11 +134,14 @@
 					<dl class="col-span-2">
 						<dt class="text-base font-normal text-gray-500 dark:text-gray-400">URL</dt>
 						<dd class="leading-none text-3xl font-bold text-gray-900 dark:text-white">
-							<a href={url} target="_blank">{url.slice(0,70)}</a>
+							<a href={url} target="_blank">{url.slice(0,40)}</a>
 						</dd>
 					</dl>
-					<dl class="col-span-1 pt-1.5">
-						<Button class="" on:click={downloadCSV}>Download Link Stats</Button>
+					<dl class="col-span-1 pt-1.5 text-right">
+						<Button color="light" on:click={downloadCSV}>
+							<DownloadOutline/>
+							<span class="pl-2">Download Link Stats</span>
+						</Button>
 					</dl>
 				</div>
 

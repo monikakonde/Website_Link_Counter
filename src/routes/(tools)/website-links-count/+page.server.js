@@ -9,14 +9,15 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 
 app.get("/fetch-links", async (req, res) => {
-  const url = req.query.url;
-  if (!url) {
+  const inputUrl = req.query.url;
+  if (!inputUrl) {
     return res.status(400).send("URL is required");
   }
 
   try {
-    const response = await axios.get(url);
+    const response = await axios.get(inputUrl);
     const $ = cheerio.load(response.data);
+    const inputUrlHost = new URL(inputUrl).host;
     const links = [];
     $("a").each((index, element) => {
       const href = $(element).attr("href");
@@ -29,15 +30,17 @@ app.get("/fetch-links", async (req, res) => {
       }
       const rel = $(element).attr("rel");
       const isNoFollow = rel && rel.includes("nofollow");
-      const followStatus = isNoFollow ? "No Follow" : "Do Follow";
+      const followStatus = isNoFollow ? "No follow" : "Do follow";
       if (href) {
-        const fullUrl = new URL(href, url).href; // Construct the full URL
-        links.push({ href: fullUrl, text, type, followStatus });
+        const fullUrl = new URL(href, inputUrl).href; // Construct the full URL
+        const linkHost = new URL(fullUrl).host;
+        const isInternal = linkHost === inputUrlHost ? "Yes" : "No";
+        links.push({ href: fullUrl, text, type, followStatus, isInternal });
       }
     });
     res.json(links);
   } catch (error) {
-    console.error(`Error fetching the HTML content from ${url}:`, error);
+    console.error(`Error fetching the HTML content from ${inputUrl}:`, error);
     res.status(500).send("Error fetching the links");
   }
 });

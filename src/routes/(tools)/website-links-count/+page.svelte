@@ -7,7 +7,6 @@
 	let error = '';
 
 	// Variables to store link statistics
-	let totalLinks = 0;
 	let noFollowLinks = 0;
 	let doFollowLinks = 0;
 	let internalLinks = 0;
@@ -23,7 +22,6 @@
 			error = '';
 
 			// Update link statistics
-			totalLinks = links.length;
 			noFollowLinks = links.filter(link => link.followStatus === 'No follow').length;
 			doFollowLinks = links.filter(link => link.followStatus === 'Do follow').length;
 			internalLinks = links.filter(link => link.isInternal === 'Yes').length;
@@ -38,7 +36,6 @@
 		links = [];
 		error = '';
 		// Reset link statistics
-		totalLinks = 0;
 		noFollowLinks = 0;
 		doFollowLinks = 0;
 		internalLinks = 0;
@@ -68,7 +65,7 @@
 					<TableBody tableBodyClass="divide-y">
 						<TableBodyRow>
 							<TableBodyCell class="font-bold">Total Links:</TableBodyCell>
-							<TableBodyCell class="">{totalLinks}</TableBodyCell>
+							<TableBodyCell class="">{links.length}</TableBodyCell>
 						</TableBodyRow>
 						<TableBodyRow>
 							<TableBodyCell class="font-bold">Do Follow Links:</TableBodyCell>
